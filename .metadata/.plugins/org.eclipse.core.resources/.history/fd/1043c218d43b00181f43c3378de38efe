@@ -1,0 +1,35 @@
+grammar org.xtext.distj14.Math with org.eclipse.xtext.common.Terminals
+
+generate math "http://www.xtext.org/distj14/Math"
+
+MathExp:
+	'result' 'is' exp=Exp
+;
+
+Exp: // Illegal due to left recusion
+	left=Factor (operator=ExpOpWeak right=Exp)?
+;
+
+Factor:
+	primary=Primary (operator=ExpOpStrong second=Factor)?
+;
+
+ExpOpWeak:
+	{Plus} '+' | {Minus} '-'
+;
+
+ExpOpStrong:
+	{Mult} '*' | {Div} '/'
+;
+
+Primary:
+	number=Number | par=Parenthesis
+;
+
+Parenthesis:
+	'(' exp=Exp ')'
+;
+
+Number:
+	value=INT
+;
